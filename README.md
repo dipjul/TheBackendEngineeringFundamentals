@@ -175,6 +175,39 @@ The decision to use stateful versus stateless apps boils down to your scalabilit
 <hr>
 
 ### HTTP
+  It is a aapplication layer protocol, functions as a request–response protocol in the client–server model. 
+  An example HTTP request:
+  ![image](https://user-images.githubusercontent.com/20329508/195249102-e78ebeda-d220-4cfb-b067-b3398f2fe14e.png)
+
+  An example response:
+  ![image](https://user-images.githubusercontent.com/20329508/195249164-e5435ad7-f7b9-42f2-9fc0-9ae476edc19a.png)
+
+  #### HTTP 1.0 over TCP
+  - new TCP connection for each request
+  - slow
+  - buffering
+
+  #### HTTP 1.1 over TCP
+  ![image](https://user-images.githubusercontent.com/20329508/195250864-a6da3bdd-dc2c-4653-afe8-f75e5f73f0ec.png)
+
+  - persisted TCP connection
+  - low latency
+  - streaming with chunked transfer
+  - pipelining (disabled by default)
+  
+  ![image](https://user-images.githubusercontent.com/20329508/195251181-e52d6b39-a015-4c86-a72c-28816580db9f.png)
+
+  #### HTTP 2 over TCP
+  - compression
+  - multiplexing
+  - server push
+  - SPDY (initial version of HTTP2 by google)
+  - secure by default
+  - protocol negotiation during TLS (NPN/ALPN)
+
+![image](https://user-images.githubusercontent.com/20329508/195253974-3ee453d4-ec61-4b6e-b7cd-9d62422de732.png)
+
+
 ### Journey of an HTTP request
 ### HTTP GET / through Switches, Routers, Gateways, and Proxies
 ### cURL Verbose mode
