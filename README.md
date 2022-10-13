@@ -209,7 +209,29 @@ The decision to use stateful versus stateless apps boils down to your scalabilit
 
 
 ### Journey of an HTTP request
+  1. HTTP request (format as shown earlier) is created
+  2. Transport Layer  
+    - TCP handshake  
+    - If a message is too large to be sent in one go, it is broken down into several segments that each have their own sequence number (situated in a header field, as well). This way, when they arrive at their destination, they will be processed in the correct order.  
+    - The HTTP request is encapsulated in a TCP segment, which has a header and data payload. The Transport Layer is responsible for sending the segment from the requesting application to the correct process in the server. It uses the use of ports: integers in the range of 0–65535 that act as identifiers for a specific application or process in a host.  
+    ![image](https://user-images.githubusercontent.com/20329508/195340082-5b0574c4-4ded-42f0-9075-acce1eacdd74.png)
+
+  3. Internet Layer  
+    - Onwards, downwards, to the Internet Layer. This is where TCP segments are turned into IP packets by the Internet Protocol (IP) The Internet Protocol is the one that enables a packet to travel from your home to a server on the other side of the world. An IP address might look something like this: 207.126.144.100, for IPv4, or this: 2a02:687:1211:7500:c8cb:bcf9:7acb:a966,. for IPv6.  
+    ![image](https://user-images.githubusercontent.com/20329508/195340164-93fb2b43-8aba-4a03-a584-61b5914623e6.png)
+
+  4. Data Link Layer  
+    - Ethernet wraps the IP packet, containing the TCP segment, into a frame. The frame takes its final form: it becomes a stream of bits travelling as electrical signals (or light signals or radio waves) towards the destination MAC address’— the router that will act as a gateway to the outside world. It's much like how real packages travel across the world: each courier processes the package and dispatches it to the next courier until it reaches its final destination.  
+    ![image](https://user-images.githubusercontent.com/20329508/195340239-35deb5ad-df9d-4d65-a065-01d96823d12d.png)
+
+  
 ### HTTP GET / through Switches, Routers, Gateways, and Proxies
+![http](https://user-images.githubusercontent.com/20329508/195497332-21156ead-d5fa-4b7b-a87f-c3ac2ff8adee.png)
+
+![httpExternal](https://user-images.githubusercontent.com/20329508/195497607-1191a764-f582-4e25-b225-55d4dcba4e53.png)
+
+![httpProxy](https://user-images.githubusercontent.com/20329508/195497940-2f3c6175-4efc-4082-85ff-80e54fda20cd.png)
+
 ### cURL Verbose mode
 ### HTTP Code 502 Bad Gateway
 ### How HTTP Tunneling works, the CONNECT method?
