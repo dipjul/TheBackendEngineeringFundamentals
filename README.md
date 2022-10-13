@@ -233,6 +233,48 @@ The decision to use stateful versus stateless apps boils down to your scalabilit
 ![httpProxy](https://user-images.githubusercontent.com/20329508/195497940-2f3c6175-4efc-4082-85ff-80e54fda20cd.png)
 
 ### cURL Verbose mode
+```
+curl -v https://www.stackoverflow.com
+*   Trying 151.101.1.69:443...
+* TCP_NODELAY set
+* Connected to www.stackoverflow.com (151.101.1.69) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: /etc/ssl/certs/ca-certificates.crt
+  CApath: /etc/ssl/certs
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=*.stackexchange.com
+*  start date: Sep  4 13:06:50 2022 GMT
+*  expire date: Dec  3 13:06:49 2022 GMT
+*  subjectAltName: host "www.stackoverflow.com" matched cert's "*.stackoverflow.com"
+*  issuer: C=US; O=Let's Encrypt; CN=R3
+*  SSL certificate verify ok.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* Using Stream ID: 1 (easy handle 0x5604558be8c0)
+> GET / HTTP/2
+> Host: www.stackoverflow.com
+> user-agent: curl/7.68.0
+> accept: */*
+>
+* Connection state changed (MAX_CONCURRENT_STREAMS == 100)!
+< HTTP/2 301
+< cache-control: private
+< content-type: text/html; charset=utf-8
+```
 ### HTTP Code 502 Bad Gateway
 ### How HTTP Tunneling works, the CONNECT method?
 ### HTTP/2
