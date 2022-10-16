@@ -386,7 +386,17 @@ Error codes use by cloudflare for more meaningfull error:
 - Long polling
 - EventSource
 
-### HTTP/3 & QUIC, HTTP/2 limitation
+### HTTP/2 limitation that leads to QUIC or HTTP/3
+HTTP/2 over TCP suffers from a slight inefficiency caused by TCP. Consider the following example: Suppose you have 3 streams A, B and C. Denote packets (frames) of each stream by lower case letters (a, b, c) and a sequence number. Let's have a look at what happens with HTTP/2 over TCP when the following sequence is sent:
+
+server ---> a2, c2, b2, *c1, b1, a1 ---> client
+
+Where the *c1 means that this frame was lost. The receiving end (client) must wait for a re-transmission of the lost *c1 frame before it can pass later frames to the application layer (namely b2,c2,a2), because the communication is over TCP and TCP guarantees in-order delivery!
+
+That is in contrast to HTTP/3 & QUIC, where over UDP these are just independent packets, thus the loss of *c1 would not delay the delivery of b2, c2 and a2 to the application layer!
+
+### QUIC or HTTP/3
+
 
 ### gRPC over HTTP/3
 ### Should RabbitMQ implement QUIC Protocol for their Channels Message Queue?
