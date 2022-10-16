@@ -276,11 +276,118 @@ curl -v https://www.stackoverflow.com
 < content-type: text/html; charset=utf-8
 ```
 ### HTTP Code 502 Bad Gateway
-### How HTTP Tunneling works, the CONNECT method?
+The server was acting as a gateway or proxy and received an invalid response from the upstream server.
+
+The 502 error code is a by-product of the source or origin server being out of order. A range of connectivity issues, a server that is powered down, or spikes in traffic can all lead to this message. Communication issues between online servers or DNS issues such as incorrectly cached IP addresses play a big role in the appearance of this error.
+
+If your website is generating a 502 status code error, then try disabling the firewall or the CDN if you are behind one. Website themes and browser plugins can also cause the error as well. If disabling the plugins does not help then try updating your website theme. Most hosting providers have customer support teams that can triage the issue with you.
+
+Error codes use by cloudflare for more meaningfull error:
+
+![image](https://user-images.githubusercontent.com/20329508/195806075-a44554cf-818f-4ce3-a823-4de79b7da2c7.png)
+
+### HTTP  CONNECT method
+#### HTTP Proxy
+  - Client wants to connect to a server beyond its reach
+  - Client doesn't know how to communicate target-server protocol
+  - Proxy has access to the server and knows how to talk to it
+  - Client connects the Proxy and Proxy makes the request on behalf of the client to the target server
+
+![image](https://user-images.githubusercontent.com/20329508/196020889-6c103f21-4123-4dd9-a675-24a5f0705de4.png)
+
+#### HTTPS Proxy
+- In HTTPS Proxy, the proxy decrypts and serves its certificate to the client instead of that of the target server
+- Proxy sees everything(BAD, but good for debugging web traffic)
+- We need a way to establish End to End encryption between the client and the target server
+
+![image](https://user-images.githubusercontent.com/20329508/196021143-d7ff3f3d-5915-4d1b-bae8-d22faf85b17a.png)
+
+#### HTTP CONNECT
+- Creates a tunnel between the client and the target server
+- Client sends HTTP CONNECT to Proxy containing target server
+- Proxy creates a TCP connection to target server
+- Once successful, proxy returns success to client
+- Any packet the client sends goes as-is to the target server
+- This includes TLS handshake, establishing e2e
+
+![image](https://user-images.githubusercontent.com/20329508/196021388-83e0a293-8994-4df1-b6f0-a172385e4f58.png)
+
+![image](https://user-images.githubusercontent.com/20329508/196021535-5e5f43e0-c837-471c-9ec6-a29d4cdba050.png)
+
+#### HTTP CONNECT Chaining
+![image](https://user-images.githubusercontent.com/20329508/196021674-e7d66347-be0c-4361-abbf-8be64dfd4959.png)
+
+**Pros:**
+- Connect to secure servers
+- Support protocols that normally not supported through proxies (WebSockets, WebRTC)
+- Proxy can't read encrypted traffic
+- Chained Proxies CONNECT
+
+**Cons**
+- Only TCP, Can't proxy UDP traffic (won't work with QUIC/DNS)
+- Each CONNECT opens new TCP, expensive, (no multiplexing)
+- Bad implementation would allow tunneling to port (eg 25 SMTP can load to spam email)
+
+**MASQUE: Multiplexed Application Substrate over QUIC Encryption**
+***Why MASQUE?***
+- Allows UDP tunneling, Can't proxy UDP traffic with CONNECT (won't work with QUIC/DNS)
+- Allows multiplexing, each CONNECT opens new TCP to same host, expensive
+- Secure, bad CONNECT implementation would allow tunneling to port (eg 25 SMTP can load to spam email)
+
 ### HTTP/2
+#### HTTP 1.1
+- We can't utilize the same connection for parallel requests
+- Browsers use 6 connections, all those connections can be use for sending more request (to overcome the above issue)
+
+#### HTTP 2
+- Multiplexed streams, as we have identifier for streams, we can compress the header too
+
+![image](https://user-images.githubusercontent.com/20329508/196023812-d739f08b-af66-460e-b7ca-7a9cc995f158.png)
+
+- Server push
+
+![image](https://user-images.githubusercontent.com/20329508/196023824-b0f67378-231b-4da8-8ad3-9f88e20b1941.png)
+
+**Pros:**
+- Multiplexing over Single Connection
+- Compression (Header & Data)
+- Server Push
+- Secure by default
+- Protocol Negotiation during TLS (ALPN)
+
+**Cons:**
+- Server push can be abushed when configured incorrectly
+- Can be slower when in mixed mode (Backend is http/2 but load balancer is http 1 or vice versa)
+
+
 ### WebSockets
-### WebSockets over HTTP/2
+![image](https://user-images.githubusercontent.com/20329508/196024821-56760d3f-ef78-4fa2-b151-f6af84b6273a.png)
+
+![image](https://user-images.githubusercontent.com/20329508/196024861-4655f16a-db9c-4bbf-b633-65b8517dc023.png)
+
+#### WebSockets usecases:
+- Chatting
+- Live Feed
+- Multiplayer gaming
+- Showing client progress/logging
+
+**Pros:**
+- Full-duplex (no polling)
+- HTTP compatible
+- Firewall friendly (standard)
+
+**Cons:**
+- Proxying is tricky
+- L7 Load Balance challenging (timeouts)
+- Stateful, difficult to horizontally scale
+
+**Do you have to use WebSockets?**
+- NO! Rule of thumb - do you absolutely need bidirectional communication?
+- Long polling
+- EventSource
+
 ### HTTP/3 & QUIC, HTTP/2 limitation
+
 ### gRPC over HTTP/3
 ### Should RabbitMQ implement QUIC Protocol for their Channels Message Queue?
 ### Can QUIC Protocol improve Database Performance in Web Applications?
